@@ -84,9 +84,9 @@
         alternateFormats: [ {uri: "diff-20111214.html", label: "diff to previous version"} ],
         */
         localBiblio:  {
-          "RDF-DATASET-NORMALIZATION": {
-            title:    "RDF Dataset Normalization 1.0",
-            href:     "http://json-ld.github.io/normalization/spec/",
+          "RDF-DATASET-CANONICALIZATION": {
+            title:    "RDF Dataset Canonicalization 1.0",
+            href:     "https://json-ld.github.io/rdf-dataset-canonicalization/spec/",
             authors:  ["David Longley", "Manu Sporny"],
             status:   "CGDRAFT",
             publisher:  "JSON-LD Community Group"
@@ -100,7 +100,7 @@
           },
           "RDF-N-Quads": {
             title:    "RDF 1.1 N-Quads",
-            href:     "http://json-ld.github.io/normalization/spec/",
+            href:     "https://json-ld.github.io/rdf-dataset-canonicalization/spec/",
             authors:  ["Gaven Carothers"],
             status:   "Recommendation",
           },
@@ -210,7 +210,7 @@ This specification defines a set of cryptographic suites for the purpose of crea
 for BBS+ Signatures in conformance with the Linked Data Proofs [[LD-PROOFS]] specification. 
       </p>
       <p>
-In general the suites uses the RDF Dataset Normalization Algorithm [[RDF-DATASET-NORMALIZATION]] to transform an
+In general the suites uses the RDF Dataset Canonicalization Algorithm [[RDF-DATASET-CANONICALIZATION]] to transform an
 input document into its canonical form. It then uses the <a>statement digest algorithm</a> 
 to digest each statement to be signed individually, finally the digested statements are signed
 using the defined <a>signature algorithm</a>.
@@ -296,7 +296,7 @@ The product of apply the <a>derive proof algorithm</a> to an <a>linked data proo
       </dd>
       <dt><dfn data-lt="quad|quads">quad</dfn></dt>
       <dd>
-A <a href="https://json-ld.github.io/normalization/spec/index.html#dfn-quad" class="externalDFN">quad</a> as specified by [[RDF-DATASET-NORMALIZATION]]
+A <a href="https://json-ld.github.io/rdf-dataset-canonicalization/spec/index.html#dfn-quad" class="externalDFN">quad</a> as specified by [[RDF-DATASET-CANONICALIZATION]]
       </dd>
       <dt><dfn data-lt="n-quad|n-quads">n-quad</dfn></dt>
       <dd>
@@ -470,7 +470,7 @@ and smaller to create rather than key generation.
                   <tr>
                     <td><a>canonicalization algorithm</a></td>
                     <td>https://w3id.org/security#URDNA2015</td>
-                    <td>[[RDF-DATASET-NORMALIZATION]]</td>
+                    <td>[[RDF-DATASET-CANONICALIZATION]]</td>
                   </tr>
                   <tr>
                     <td><a>statement digest algorithm</a></td>
@@ -835,7 +835,7 @@ the following algorithms:
           <tr>
             <td><a>canonicalization algorithm</a></td>
             <td>https://w3id.org/security#URDNA2015</td>
-            <td>[[RDF-DATASET-NORMALIZATION]]</td>
+            <td>[[RDF-DATASET-CANONICALIZATION]]</td>
           </tr>
           <tr>
             <td><a>statement digest algorithm</a></td>
