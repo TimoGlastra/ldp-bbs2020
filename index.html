@@ -41,7 +41,9 @@
           { name: "Tobias Looker", url: "https://mattr.global/",
             company: "Mattr", companyURL: "https://mattr.global/" },
           { name: "Orie Steele", url: "https://transmute.industries",
-            company: "Transmute", companyURL: "https://transmute.industries" }
+            company: "Transmute", companyURL: "https://transmute.industries" },
+          { name: "Timo Glastra", url: "https://animo.id/",
+            company: "Animo Solutions", companyURL: "https://animo.id/" },
         ],
 
         // extend the bibliography entries
@@ -292,7 +294,7 @@ and derives a proof only revealing the <a>statement</a>s defined in the <a>revea
       </dd>
       <dt><dfn>derived proof</dfn></dt>
       <dd>
-The product of apply the <a>derive proof algorithm</a> to an <a>linked data proof document</a> and <a>reveal document</a>. 
+The product of applying the <a>derive proof algorithm</a> to an <a>linked data proof document</a> and <a>reveal document</a>. 
       </dd>
       <dt><dfn data-lt="quad|quads">quad</dfn></dt>
       <dd>
@@ -336,6 +338,20 @@ is an algorithm that accomplishes the process of framing an input document to a 
       <dd>
 A <a href="https://www.w3.org/TR/rdf11-concepts/#dfn-blank-node" class="externalDFN">blank node</a> as specified by [[RDF-CONCEPTS]].
 In short, it is a node in a graph that is neither an IRI, nor a literal.
+      </dd>
+      </dl>
+      <dt><dfn data-lt="Blank node identifiers | Blank node identifier">blank node identifier</dfn></dt>
+      <dd>
+A <a href="https://www.w3.org/TR/rdf11-concepts/#dfn-blank-node-identifier" class="externalDFN">blank node identifier</a> as specified by [[RDF-CONCEPTS]].
+In short, it is a local identifier for a blank node, scoped to the document. An example blank node identifier is <code>_:c14n0</code>.
+      </dd>
+      </dl>
+      <dt><dfn data-lt="Placeholder node identifiers | Placeholder node identifier">placeholder node identifier</dfn></dt>
+      <dd>
+A placeholder node identifier is an IRI representation of a blank node identifier used for derived <a>linked data proof documents</a>. 
+The identifier is a URN according to [[RFC8141]], with a namespace identifier of <code>bnid</code>.
+A full placeholder node identifier consists of the <code>urn</code> scheme, the <code>bnid</code> namespace identifier, and the blank node identifier.
+An example placeholder node identifier is <code>urn:bnid:_:c14n0</code>.
       </dd>
       </dl>
     </section>
@@ -740,8 +756,8 @@ and smaller to create rather than key generation.
 
           <p>
             A <a>linked data document</a> featuring a BBS+ Signature </a>linked data proof</a> MUST contain a <code>requiredRevealStatements</code> 
-            attribute with a value that is an array of un-signed integers representing the indicies of the statements in the <a>canonical form</a> 
-            that MUST always be revealed in a <a>derived proof</a>. The indicies corresponding to the statements for the <code>verificationMethod</code> 
+            attribute with a value that is an array of un-signed integers representing the indices of the statements in the <a>canonical form</a> 
+            that MUST always be revealed in a <a>derived proof</a>. The indices corresponding to the statements for the <code>verificationMethod</code> 
             and <code>proofPurpose</code> as apart of the </a>linked data proof</a> MUST always be present.
           </p>
 
@@ -1379,8 +1395,18 @@ value of <code>BbsBoundSignatureProof2020</code>.
               represented as <a>n-quads</a>. Let this set be known as the <dfn>input proof document statements</dfn>.
             </li>
             <li>
+              Initialize an empty array of length equal to the length of the <a>input proof document statements</a> array.
+              Let this be known as the <dfn>transformed input proof document statements</dfn> array.
+            </li>
+            <li>For each <a>statement</a> in <a>input proof document statements</a>:
+              <ol class="algorithm">
+                <li>Add <code>urn:bnid:</code> as a prefix to all <a>blank node identifiers</a> in <a>statement</a>.</li>
+                <li>Insert <a>statement</a> into the <a>transformed input proof document statements</a> array.</li>
+              </ol>
+            </li>
+            <li>
               Record the total number of <a>statements</a> in the <a>input proof document statements</a>. 
-              Let this be known as the <a>total statements</a>.
+              Let this be known as the <dfn>total statements</dfn>.
             </li>
             <li>
               Apply the <a>framing algorithm</a> to the <a>input proof document</a>. Let the product of the <a>framing algorithm</a> be
@@ -1392,19 +1418,50 @@ value of <code>BbsBoundSignatureProof2020</code>.
             </li>
             <li>
               Initialize an empty array of length equal to the number of <a>revealed statements</a>. 
-              Let this be known as the <a>revealed indicies</a> array.
+              Let this be known as the <dfn>revealed indices</dfn> array.
             </li>
             <li>For each <a>statement</a> in order:
               <ol class="algorithm">
                 <li>Find the numerical index the <a>statement</a> occupies in the set <a>input proof document statements</a>.
-                <li>Insert this numerical index into the <a>revealed indicies</a> array</li>
+                <li>Insert this numerical index into the <a>revealed indices</a> array</li>
               </ol>
-            <li>Returned the <a>revealed indicies</a> array, <a>total statements</a> and <a>input proof document statements</a>.</li>
+            <li>Return the <a>revealed indices</a> array, <a>total statements</a> and <a>input proof document statements</a>.</li>
           </ol>
           <div class="issue">TODO: Define how we have to validate the requiredRevealStatements</div>
-          
+
           <div class="issue">TODO: Add a comment on how we diff the input proof document and the reveal
             document to produce get the correct node identifiers for the reveal document</div>
+      </section>
+
+      <section>
+        <h4>Create Verify Derived Proof Data Algorithm</h4>
+        
+        <p>
+          The following algorithm defined below outlines the process of obtaining the inputs into the <a>verify derived proof algorithm</a>.
+        </p>
+
+        <dt><dfn>revealed proof document</dfn></dt>
+            <dd>
+      A <a>linked data proof document</a> featuring a derived <a>linked data proof</a>
+            </dd>
+
+          <ol class="algorithm">
+            <li>
+              Apply the <a>canonicalization algorithm</a> to the <a>revealed proof document</a> to obtain a set of <a>statements</a>
+              represented as <a>n-quads</a>. Let this set be known as the <dfn>revealed proof document statements</dfn>.
+            </li>
+            <li>
+              Initialize an empty array of length equal to the length of the <a>revealed proof document statements</a> array.
+              Let this be known as the <dfn>transformed statements</dfn> array.
+            </li>
+            <li>For each <a>statement</a> in <a>revealed proof document statements</a>:
+              <ol class="algorithm">
+                <li>Remove the <code>urn:bnid:</code> node identifier prefix from all <a>placeholder node identifiers</a> in <a>statement</a>.</li>
+                <li>Insert <a>statement</a> into the <a>transformed statements</a> array.</li>
+              </ol>
+            </li>
+            <li>Return the <a>transformed statements</a> array.</li>
+          </ol>
       </section>
 
     </section>
