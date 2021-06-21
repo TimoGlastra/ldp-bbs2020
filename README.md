@@ -12,3 +12,4 @@ The following is a list of known implementations of this specification
 
 - [jsonld-signatures-bbs](https://github.com/mattrglobal/jsonld-signatures-bbs) (Typescript + Rust)
 - [aries-framework-go](https://github.com/hyperledger/aries-framework-go) (Golang)
+- [aries-cloudagent-python](https://github.com/hyperledger/aries-cloudagent-python) (Python)
